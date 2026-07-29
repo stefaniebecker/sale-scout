@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container--wide" style="padding-top:40px; padding-bottom:64px;">
+
+  {% for msg in get_flashed_messages(category_filter=["success"]) %}
+    <div class="alert alert-success">{{ msg }}</div>
+  {% endfor %}
+  {% for msg in get_flashed_messages(category_filter=["error"]) %}
+    <div class="alert alert-error">{{ msg }}</div>
+  {% endfor %}
+
+  <!-- Page header -->
+  <div class="page-header">
+    <h1>Good morning{% if current_user.name %}, {{ current_user.name.split()[0] }}{% endif %}.</h1>
+    <p>
+      {% if runs and runs[0].status == "success" %}
+        Last run: {{ runs[0].ran_at.strftime("%B %d at %I:%M %p") }} · {{ runs[0].items_found }} item{{ 's' if runs[0].items_found != 1 else '' }} found
+      {% else %}
+        No runs yet — click Run Now to get your first sale report.
+      {% endif %}
+    </p>
+  </div>
+
+  {% if not current_user.setup_complete %}
+  <div class="alert alert-error" style="margin-bottom:28px;">
+    Your setup isn't complete yet. <a href="{{ url_for('setup') }}" style="color:var(--error); font-weight:600;">Finish setup →</a>
+  </div>
+  {% endif %}
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <span class="stat-number">{{ runs | length }}</span>
+      <span class="stat-label">Runs this month</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number">
+        {% if runs %}{{ runs[0].items_found }}{% else %}—{% endif %}
+      </span>
+      <span class="stat-label">Items in last run</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number">{{ current_user.threshold_pct }}%</span>
+      <span class="stat-label">Your threshold</span>
+    </div>
+  </div>
+
+  <!-- Run now CTA -->
+  <div class="run-cta">
+    <h2>Run Sale Scout now</h2>
+    <p>Scan your storefront and send today's sale email to your inbox immediately.</p>
+    <form method="POST" action="{{ url_for('run_now') }}">
+      <button type="submit" class="btn" style="background:var(--cream); color:var(--burgundy);"
+        {% if not current_user.setup_complete %}disabled{% endif %}>
+        → Run now
+      </button>
+    </form>
+  </div>
+
+  <!-- Run history -->
+  <div class="card">
+    <h2 style="margin-bottom:20px;">Run history</h2>
+    {% if runs %}
+    <table class="run-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Items found</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for run in runs %}
+        <tr>
+          <td>{{ run.ran_at.strftime("%b %d, %Y · %I:%M %p") }}</td>
+          <td>{{ run.items_found }} item{{ 's' if run.items_found != 1 else '' }}</td>
+          <td>
+            {% if run.status == "success" %}
+              <span class="badge badge-success">Success</span>
+            {% else %}
+              <span class="badge badge-error">Error</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p style="color:var(--text-muted); font-size:0.9rem;">No runs yet. Click Run Now above to get started.</p>
+    {% endif %}
+  </div>
+
+  <!-- Schedule note -->
+  <div class="card card-sm" style="background:var(--cream); border-color:var(--border);">
+    <p style="font-size:0.85rem; color:var(--text-muted);">
+      ⏰ &nbsp;Sale Scout runs automatically every morning at <strong>8:00 AM ET</strong>.
+      You don't need to do anything — just check your inbox.
+      &nbsp;<a href="{{ url_for('settings') }}" style="color:var(--burgundy);">Change settings →</a>
+    </p>
+  </div>
+
+</div>
+{% endblock %}

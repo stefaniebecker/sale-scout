@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Amazon Sale Alerts for Creators{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <h1>Stop Guessing What to Post</h1>
+    <p>Sale Scout scans your entire Amazon storefront every morning and emails you a list of everything on sale — so you always know your best affiliate opportunities before you sit down to create.</p>
+    <div class="hero-actions">
+      <a href="{{ url_for('signup') }}" class="btn btn-primary" style="background:var(--cream); color:var(--burgundy);">Get started free</a>
+      <a href="{{ url_for('login') }}" class="btn btn-secondary">Sign in</a>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="container--wide">
+    <div class="container" style="text-align:center; margin-bottom:0;">
+      <h2>Everything you need. Nothing you don't.</h2>
+      <p style="color:var(--text-muted); max-width:480px; margin:8px auto 0;">Built specifically for Amazon creators who promote products and want to share deals with their audience.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">📬</div>
+        <h3>Daily email digest</h3>
+        <p>Every morning, get a branded email showing every product on your storefront that's on sale — with prices, images, and ready-to-copy affiliate links.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔗</div>
+        <h3>Deep links included</h3>
+        <p>Every product comes with a deep link that opens the Amazon app directly on your followers' phones — no browser redirect, higher conversion.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚙️</div>
+        <h3>Your threshold, your inbox</h3>
+        <p>Set the minimum discount you care about — 20%, 30%, 40%. Only get notified when deals actually meet your standard.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎨</div>
+        <h3>Branded to you</h3>
+        <p>Upload your logo and brand colors. Your daily email looks like it came from your brand, not a generic tool.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>Your links, your commissions</h3>
+        <p>Sale Scout uses your own Amazon affiliate tag. Every click earns commission for you — we never touch your earnings.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <h3>Fully automatic</h3>
+        <p>Set it up once and forget it. Sale Scout runs every morning at 8am — you just open your inbox and decide what to post.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--burgundy); padding:60px 0; text-align:center;">
+  <div class="container">
+    <h2 style="color:var(--cream); font-size:1.8rem;">Ready to wake up to your best deals?</h2>
+    <p style="color:rgba(245,244,240,0.75); margin:12px 0 28px;">Takes about 10 minutes to set up. Runs automatically every day after that.</p>
+    <a href="{{ url_for('signup') }}" class="btn" style="background:var(--cream); color:var(--burgundy);">Get started free</a>
+  </div>
+</section>
+{% endblock %}

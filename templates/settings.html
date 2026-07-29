@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top:48px; padding-bottom:64px;">
+
+  <div class="page-header">
+    <h1>Settings</h1>
+    <p>Update your storefront details, credentials, or notification preferences.</p>
+  </div>
+
+  {% for msg in get_flashed_messages(category_filter=["success"]) %}
+    <div class="alert alert-success">{{ msg }}</div>
+  {% endfor %}
+  {% for msg in get_flashed_messages(category_filter=["error"]) %}
+    <div class="alert alert-error">{{ msg }}</div>
+  {% endfor %}
+
+  <form method="POST">
+    <div class="card">
+
+      <!-- Profile -->
+      <div class="form-section-title">Your Profile</div>
+      <div class="form-group">
+        <label for="name">Your name</label>
+        <input type="text" id="name" name="name"
+               value="{{ current_user.name or '' }}" placeholder="Your name">
+      </div>
+
+      <!-- Storefront -->
+      <div class="form-section">
+        <div class="form-section-title">Amazon Storefront</div>
+        <div class="form-group">
+          <label for="storefront_handle">Storefront handle</label>
+          <input type="text" id="storefront_handle" name="storefront_handle"
+                 value="{{ current_user.storefront_handle or '' }}"
+                 placeholder="e.g. sarahliving">
+          <p class="form-hint">The word after amazon.com/shop/ in your storefront URL.</p>
+        </div>
+        <div class="form-group">
+          <label for="affiliate_tag">Affiliate tag</label>
+          <input type="text" id="affiliate_tag" name="affiliate_tag"
+                 value="{{ current_user.affiliate_tag or '' }}"
+                 placeholder="e.g. yourname-20">
+        </div>
+      </div>
+
+      <!-- API Keys -->
+      <div class="form-section">
+        <div class="form-section-title">Amazon API Credentials</div>
+        <div class="form-group">
+          <label for="amazon_access_key">Access key</label>
+          <input type="text" id="amazon_access_key" name="amazon_access_key"
+                 value="{{ current_user.amazon_access_key or '' }}"
+                 placeholder="amzn1.application-oa2-client...">
+        </div>
+        <div class="form-group">
+          <label for="amazon_secret_key">Secret key</label>
+          <input type="password" id="amazon_secret_key" name="amazon_secret_key"
+                 placeholder="Leave blank to keep current key">
+          <p class="form-hint">Only fill this in if you're updating your key.</p>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="form-section">
+        <div class="form-section-title">Email Delivery</div>
+        <div class="form-group">
+          <label for="alert_email">Send alerts to</label>
+          <input type="email" id="alert_email" name="alert_email"
+                 value="{{ current_user.alert_email or '' }}"
+                 placeholder="you@email.com">
+        </div>
+        <div class="form-group">
+          <label for="gmail_address">Gmail sending address</label>
+          <input type="email" id="gmail_address" name="gmail_address"
+                 value="{{ current_user.gmail_address or '' }}"
+                 placeholder="yourgmail@gmail.com">
+        </div>
+        <div class="form-group">
+          <label for="gmail_app_password">Gmail app password</label>
+          <input type="password" id="gmail_app_password" name="gmail_app_password"
+                 placeholder="Leave blank to keep current password">
+          <p class="form-hint">Only fill this in if you're updating your app password.</p>
+        </div>
+      </div>
+
+      <!-- Threshold -->
+      <div class="form-section">
+        <div class="form-section-title">Sale Threshold</div>
+        <div class="form-group">
+          <label for="threshold_pct">Minimum % off to notify me</label>
+          <select id="threshold_pct" name="threshold_pct">
+            <option value="15" {% if current_user.threshold_pct == 15 %}selected{% endif %}>15% off or more</option>
+            <option value="20" {% if current_user.threshold_pct == 20 %}selected{% endif %}>20% off or more</option>
+            <option value="25" {% if current_user.threshold_pct == 25 %}selected{% endif %}>25% off or more (recommended)</option>
+            <option value="30" {% if current_user.threshold_pct == 30 %}selected{% endif %}>30% off or more</option>
+            <option value="40" {% if current_user.threshold_pct == 40 %}selected{% endif %}>40% off or more</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="display:flex; gap:12px;">
+      <button type="submit" class="btn btn-dark">Save changes</button>
+      <a href="{{ url_for('dashboard') }}" class="btn btn-outline">Cancel</a>
+    </div>
+  </form>
+
+</div>
+{% endblock %}

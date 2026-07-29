@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Sale Scout",
+      "runtimeExecutable": "/usr/bin/python3",
+      "runtimeArgs": ["app.py"],
+      "port": 5001,
+      "url": "http://localhost:5001"
+    }
+  ]
+}
