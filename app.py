@@ -231,7 +231,8 @@ def run_for_creator(creator):
         _log_run(creator.id, len(sale_items), "success")
 
     except Exception as e:
-        _log_run(creator.id, 0, "error", str(e))
+        import traceback
+        _log_run(creator.id, 0, "error", traceback.format_exc() or repr(e))
 
 
 def _log_run(creator_id, items_found, status, error=None):

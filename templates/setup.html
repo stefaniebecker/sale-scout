@@ -46,16 +46,17 @@
           Don't have them yet? <a href="https://associates.amazon.com" target="_blank" style="color:var(--burgundy);">Apply here</a> and come back once approved.
         </p>
         <div class="form-group">
-          <label for="amazon_access_key">Access key</label>
+          <label for="amazon_access_key">Client ID (Credential ID)</label>
           <input type="text" id="amazon_access_key" name="amazon_access_key"
                  placeholder="amzn1.application-oa2-client..." required
                  value="{{ current_user.amazon_access_key or '' }}">
+          <p class="form-hint">Labeled "Credential ID" in your Amazon Associates dashboard.</p>
         </div>
         <div class="form-group">
-          <label for="amazon_secret_key">Secret key</label>
+          <label for="amazon_secret_key">Client Secret</label>
           <input type="password" id="amazon_secret_key" name="amazon_secret_key"
                  placeholder="amzn1.oa2-cs..." required>
-          <p class="form-hint">Stored securely. Never shared.</p>
+          <p class="form-hint">Found next to your Credential ID. Stored securely, never shared.</p>
         </div>
       </div>
 

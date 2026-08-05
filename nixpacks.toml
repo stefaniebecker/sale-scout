@@ -1,8 +1,8 @@
 [phases.setup]
-nixPkgs = ["python311", "gcc", "libffi"]
+nixPkgs = ["python311", "gcc", "libffi", "chromium", "nss", "nspr", "atk", "at-spi2-atk", "xorg.libX11", "xorg.libXcomposite", "xorg.libXdamage", "xorg.libXext", "xorg.libXfixes", "xorg.libXrandr", "xorg.libxcb", "libxkbcommon", "mesa", "expat", "cups", "dbus", "xorg.libXcursor", "xorg.libXi", "xorg.libXtst", "alsa-lib"]
 
 [phases.install]
-cmds = ["pip install -r requirements.txt"]
+cmds = ["pip install -r requirements.txt", "playwright install chromium"]
 
 [start]
 cmd = "gunicorn app:app --bind 0.0.0.0:$PORT"

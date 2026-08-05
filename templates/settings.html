@@ -49,16 +49,17 @@
       <div class="form-section">
         <div class="form-section-title">Amazon API Credentials</div>
         <div class="form-group">
-          <label for="amazon_access_key">Access key</label>
+          <label for="amazon_access_key">Client ID (Credential ID)</label>
           <input type="text" id="amazon_access_key" name="amazon_access_key"
                  value="{{ current_user.amazon_access_key or '' }}"
                  placeholder="amzn1.application-oa2-client...">
+          <p class="form-hint">Labeled "Credential ID" in your Amazon Associates dashboard.</p>
         </div>
         <div class="form-group">
-          <label for="amazon_secret_key">Secret key</label>
+          <label for="amazon_secret_key">Client Secret</label>
           <input type="password" id="amazon_secret_key" name="amazon_secret_key"
-                 placeholder="Leave blank to keep current key">
-          <p class="form-hint">Only fill this in if you're updating your key.</p>
+                 placeholder="Leave blank to keep current">
+          <p class="form-hint">Only fill this in if you're updating your secret.</p>
         </div>
       </div>
 
