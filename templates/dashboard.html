@@ -82,7 +82,7 @@
             {% else %}
               <span class="badge badge-error">Error</span>
               {% if run.error %}
-                <div style="font-size:0.78rem; color:var(--text-muted); margin-top:4px;">{{ run.error[:120] }}</div>
+                <div style="font-size:0.78rem; color:var(--text-muted); margin-top:4px;">{{ run.error[:500] }}</div>
               {% endif %}
             {% endif %}
           </td>
