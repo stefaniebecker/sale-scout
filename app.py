@@ -187,9 +187,22 @@ def run_now():
     if not current_user.setup_complete:
         flash("Please complete your setup first.", "error")
         return redirect(url_for("setup"))
-    run_for_creator(current_user)
-    flash("Sale Scout is running — check your inbox in a few minutes.", "success")
+
+    # The scrape takes minutes — run it in the background so the request
+    # returns immediately instead of being killed by the gunicorn timeout.
+    import threading
+    threading.Thread(target=_run_in_background, args=(current_user.id,), daemon=True).start()
+
+    flash("Sale Scout is running — this takes a few minutes. Refresh to see the result.", "success")
     return redirect(url_for("dashboard"))
+
+
+def _run_in_background(creator_id):
+    """Re-fetch the creator inside the thread — request-bound objects don't survive."""
+    with app.app_context():
+        creator = db.session.get(Creator, creator_id)
+        if creator:
+            run_for_creator(creator)
 
 
 # ── Pipeline runner ────────────────────────────────────────────────────────────
