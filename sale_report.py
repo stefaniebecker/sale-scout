@@ -23,8 +23,6 @@ from creatorsapi_python_sdk.models import GetItemsRequestContent, GetItemsResour
 
 from scrape_storefront import scrape_storefront
 from deeplink import make_deep_link
-from slack_notify import send_sale_digest
-from email_notify import send_sale_email
 
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), ".env"))
 
