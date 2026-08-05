@@ -233,7 +233,11 @@ def run_for_creator(creator):
 
         asins = scrape_storefront(creator.storefront_handle)
         if not asins:
-            _log_run(creator.id, 0, "success")
+            # A blocked scrape and a genuinely empty storefront look the same from
+            # here, so flag it rather than reporting a misleading success.
+            _log_run(creator.id, 0, "error",
+                     f"Scraped 0 products from storefront '{creator.storefront_handle}'. "
+                     "Either the handle is wrong or Amazon blocked the request.")
             return
 
         api = build_api()
@@ -247,7 +251,9 @@ def run_for_creator(creator):
                 creator_name=creator.name or "Your Store",
             )
 
-        _log_run(creator.id, len(sale_items), "success")
+        # Record the ASIN count so "0 items" is interpretable at a glance.
+        _log_run(creator.id, len(sale_items), "success",
+                 f"Checked {len(asins)} products from your storefront.")
 
     except Exception as e:
         import traceback

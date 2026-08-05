@@ -79,6 +79,9 @@
           <td>
             {% if run.status == "success" %}
               <span class="badge badge-success">Success</span>
+              {% if run.error %}
+                <div style="font-size:0.78rem; color:var(--text-muted); margin-top:4px;">{{ run.error[:200] }}</div>
+              {% endif %}
             {% else %}
               <span class="badge badge-error">Error</span>
               {% if run.error %}
