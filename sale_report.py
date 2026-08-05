@@ -74,9 +74,12 @@ def batches(lst, size):
         yield lst[i:i + size]
 
 
-def get_sale_items(api: DefaultApi, asins: list, threshold: int) -> list:
+def get_sale_items(api: DefaultApi, asins: list, threshold: int, stats: dict = None) -> list:
+    """Pass a dict as `stats` to collect batch success/failure counts."""
     sale_items = []
     total_batches = (len(asins) + BATCH_SIZE - 1) // BATCH_SIZE
+    if stats is not None:
+        stats.update(batches_ok=0, batches_failed=0, last_error=None)
 
     for i, batch in enumerate(batches(asins, BATCH_SIZE), 1):
         print(f"  Checking batch {i}/{total_batches} ({len(batch)} ASINs)...", end=" ")
@@ -89,8 +92,14 @@ def get_sale_items(api: DefaultApi, asins: list, threshold: int) -> list:
             response = api.get_items(x_marketplace=MARKETPLACE, get_items_request_content=request)
         except Exception as e:
             print(f"ERROR: {e}", file=sys.stderr)
+            if stats is not None:
+                stats["batches_failed"] += 1
+                stats["last_error"] = str(e)[:200]
             time.sleep(2)
             continue
+
+        if stats is not None:
+            stats["batches_ok"] += 1
 
         items = []
         result = getattr(response, "items_result", None)

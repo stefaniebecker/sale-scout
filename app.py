@@ -241,8 +241,17 @@ def run_for_creator(creator):
             return
 
         api = build_api()
-        sale_items = get_sale_items(api, asins, creator.threshold_pct)
+        stats = {}
+        sale_items = get_sale_items(api, asins, creator.threshold_pct, stats=stats)
         sale_items.sort(key=lambda x: x.pct_off, reverse=True)
+
+        # Every price check failing looks the same as nothing being on sale,
+        # so surface it as an error instead of a clean run.
+        if stats.get("batches_ok") == 0 and stats.get("batches_failed", 0) > 0:
+            _log_run(creator.id, 0, "error",
+                     f"All {stats['batches_failed']} Amazon API calls failed — check your "
+                     f"Credential ID and Client Secret. Last error: {stats.get('last_error')}")
+            return
 
         if sale_items:
             send_sale_email(
@@ -252,8 +261,12 @@ def run_for_creator(creator):
             )
 
         # Record the ASIN count so "0 items" is interpretable at a glance.
-        _log_run(creator.id, len(sale_items), "success",
-                 f"Checked {len(asins)} products from your storefront.")
+        note = f"Checked {len(asins)} products from your storefront."
+        if stats.get("batches_failed"):
+            note += f" ({stats['batches_failed']} price checks failed.)"
+        if not sale_items:
+            note += f" Nothing at {creator.threshold_pct}%+ off, so no email was sent."
+        _log_run(creator.id, len(sale_items), "success", note)
 
     except Exception as e:
         import traceback
