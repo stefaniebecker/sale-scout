@@ -15,7 +15,13 @@ from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-change-in-production")
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///salescout.db")
+
+# Railway hands us postgres:// but SQLAlchemy 2.x requires postgresql://
+_db_url = os.environ.get("DATABASE_URL", "sqlite:///salescout.db")
+if _db_url.startswith("postgres://"):
+    _db_url = _db_url.replace("postgres://", "postgresql://", 1)
+
+app.config["SQLALCHEMY_DATABASE_URI"] = _db_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
@@ -280,7 +286,9 @@ scheduler.start()
 
 # ── Init ───────────────────────────────────────────────────────────────────────
 
+# Runs on import so tables exist under gunicorn too, not just `python3 app.py`.
+with app.app_context():
+    db.create_all()
+
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
     app.run(debug=True, port=5001)

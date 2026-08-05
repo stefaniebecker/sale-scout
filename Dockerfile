@@ -17,4 +17,7 @@ RUN playwright install chromium
 
 COPY . .
 
+# SQLite fallback needs this dir to exist; it's excluded from the build context.
+RUN mkdir -p instance
+
 CMD ["/bin/sh", "-c", "gunicorn app:app --bind 0.0.0.0:${PORT:-8080} --timeout 120"]
