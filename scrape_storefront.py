@@ -16,14 +16,11 @@ import sys
 import time
 
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeout
-from playwright_stealth import Stealth
 
 BASE = "https://www.amazon.com"
 STOREFRONT_URL = BASE + "/shop/{handle}"
 ASIN_RE = re.compile(r'^B[A-Z0-9]{9}$')
 LIST_PATH_RE = re.compile(r'/shop/[^/]+/list/([A-Z0-9]+)', re.IGNORECASE)
-
-STEALTH = Stealth()
 
 UA = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
@@ -39,7 +36,6 @@ def make_page(browser):
         locale="en-US",
     )
     page = context.new_page()
-    STEALTH.apply_stealth_sync(page)
     return page
 
 
