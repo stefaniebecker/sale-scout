@@ -172,7 +172,9 @@ def settings():
         current_user.storefront_handle  = request.form.get("storefront_handle", "").strip()
         current_user.affiliate_tag      = request.form.get("affiliate_tag", "").strip()
         current_user.amazon_access_key  = request.form.get("amazon_access_key", "").strip()
-        current_user.amazon_secret_key  = request.form.get("amazon_secret_key", "").strip()
+        # Blank means "keep current" for secrets — never overwrite with empty.
+        if request.form.get("amazon_secret_key", "").strip():
+            current_user.amazon_secret_key = request.form.get("amazon_secret_key", "").strip()
         current_user.alert_email        = request.form.get("alert_email", "").strip()
         current_user.gmail_address      = request.form.get("gmail_address", "").strip()
         if request.form.get("gmail_app_password"):
